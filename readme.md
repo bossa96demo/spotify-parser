@@ -7,11 +7,11 @@ This script will ask you for *3* things:
 2. Client ID
 3. Client Secret
 
-1. How to get `Playlist ID`
+- How to get `Playlist ID`
 	- Open any playlist in your browser
 	- You will get something like this: `https://open.spotify.com/playlist/37i9dQZF1DX2pprEpa9URZ`
 	- Copy that mixture of letter and numbers after `playlist/`
-2. How to get `Client ID` and `Client Secret`
+- How to get `Client ID` and `Client Secret`
 	- Log In on `developer.spotify.com`
 	- Go to `Dashboard`
 	- Press `Create App`
