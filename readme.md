@@ -25,3 +25,6 @@ Tip! How to extract your `Liked Songs`:
 - Go to `Liked Songs`
 - Press `CTRL + A`, that will select all your favourite songs
 - Simply drag them in your playlist
+
+Maybe, I will rewrite it in C or C++ because now it is very slow.
+It most slowly `processes` already existing data, I hope C/C++ will be faster.
