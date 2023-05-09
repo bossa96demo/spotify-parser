@@ -5,12 +5,12 @@ read -p "client secret(see readme): " client_secret
 
 # getting access token from spotify
 url="https://accounts.spotify.com/api/token"
-req=$(curl --request POST --url "$url" --header "Content-Type: application/x-www-form-urlencoded" --data "grant_type=client_credentials&client_id=$client_id&client_secret=$client_secret")
+req=$(curl --silent --request POST --url "$url" --header "Content-Type: application/x-www-form-urlencoded" --data "grant_type=client_credentials&client_id=$client_id&client_secret=$client_secret")
 token=$(echo $req | jq ".access_token" | tr -d '"')
 
 # counting all the songs user got in playlist
 url="https://api.spotify.com/v1/playlists/$playlist_id/tracks"
-req=$(curl --request GET --url "$url" --header "Authorization: Bearer $token")
+req=$(curl --silent --request GET --url "$url" --header "Authorization: Bearer $token")
 total=$(echo $req | jq ".total")
 echo "you have $total songs in your playlist"
 
@@ -41,7 +41,7 @@ done
 for i in $(seq 0 $num_batches); do
 	echo "$(( $i * 100 )) songs was carefully parsed and added to file"
 	last_step "abob_song$i"
-	rm "abob_song$i"
 done
+rm abob_song*
 cat "a-little-bit-left" | sed "s/null - null//g" | grep -v "^$" > final_output.txt
 rm a-little-bit-left
