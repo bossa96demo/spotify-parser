@@ -20,9 +20,12 @@ function last_step {
 		abob=$(cat $1 | jq ".items" | jq ".[$i]" | jq ".track")
 		name=$(echo $abob | jq '.name' | tr -d '"')
 		artist=$(echo $abob | jq '.artists' | jq '.[0]' | jq '.name' | tr -d '"')
-		echo "$name - $artist" >> "a-little-bit-left"
+		echo "$name - $artist" | sed 's/null - null//g' | grep -v '^$' >> "final_output.txt"
 	done
 }
+
+# in case the script runs more than 1 time
+test -e final_output.txt | rm -i final_output.txt
 
 # doing math to exract all songs and to forget anything
 batch_size=100
@@ -32,16 +35,17 @@ echo $num_batches
 # getting songs with spotify api
 for i in $(seq 0 $num_batches); do
 	offset=$(( $i * $batch_size ))
-	echo $offset songs already extracted
+	echo -ne "$offset songs already extracted\r"
 	songs=$(curl --silent --request GET --url "$url?limit=$batch_size&offset=$offset" --header "Authorization: Bearer $token")
 	echo $songs > "abob_song$i"
 done
+echo "extracting finished. starting parsing."
 
 # parsing and writing (last step)
 for i in $(seq 0 $num_batches); do
-	echo "$(( $i * 100 )) songs was carefully parsed and added to file"
+	echo -ne "$(( $i * 100 )) songs was carefully parsed and added to file\r"
 	last_step "abob_song$i"
 done
+
+echo "everything is done! result waits you in final_output.txt"
 rm abob_song*
-cat "a-little-bit-left" | sed "s/null - null//g" | grep -v "^$" > final_output.txt
-rm a-little-bit-left
